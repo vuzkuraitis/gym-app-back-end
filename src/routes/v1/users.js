@@ -181,12 +181,12 @@ router.post('/new-password', validation(newPassword), async (req, res) => {
 
     if (data.length !== 1) {
       await con.end();
-      return res.status(400).send({ err: 'Invalid change password request. Please try again 1' });
+      return res.status(400).send({ err: 'Invalid change password request. Please try again' });
     }
 
     if ((new Date().getTime() - new Date(data[0].timestamp).getTime()) / 60000 > 30) {
       await con.end();
-      return res.status(400).send({ err: 'Invalid change password request. Please try again 2' });
+      return res.status(400).send({ err: 'Invalid change password request. Please try again' });
     }
 
     const hashedPassword = bcrypt.hashSync(req.body.password, 10);
@@ -199,7 +199,7 @@ router.post('/new-password', validation(newPassword), async (req, res) => {
 
     if (!changeResponse.affectedRows) {
       await con.end();
-      return res.status(500).send({ err: 'Server issue occured. Please try again later 1' });
+      return res.status(500).send({ err: 'Server issue occured. Please try again later' });
     }
 
     await con.execute(`
@@ -210,7 +210,7 @@ router.post('/new-password', validation(newPassword), async (req, res) => {
     await con.end();
     return res.send({ msg: 'Password has been changed' });
   } catch (err) {
-    return res.status(500).send({ err: 'Server issue occured. Please try again later 2' });
+    return res.status(500).send({ err: 'Server issue occured. Please try again later' });
   }
 });
 
